@@ -17,7 +17,9 @@
 
 # Set default directories
 ROOT_DIR=$(pwd)
-mkdir out
+if [ ! -d "out" ]; then
+	mkdir out
+fi
 OUT_DIR=$ROOT_DIR/out
 KERNEL_DIR=$ROOT_DIR
 DTB_DIR=arch/arm64/boot/dts/exynos
@@ -27,15 +29,13 @@ DTBO_DIR=arch/arm64/boot/dts/samsung/a21s
 PROJECT_NAME="Halium Kernel"
 CORES=$(nproc --all)
 ZIPNAME=A217F_Halium_
-GCC_ARM64_FILE=aarch64-linux-gnu-
-GCC_ARM32_FILE=arm-linux-gnueabi-
 DEFCONFIG=halium_defconfig
 
 # Export commands
 export VERSION=$DEFAULT_NAME
 export ARCH=arm64
-export CROSS_COMPILE=toolchain/bin/$GCC_ARM64_FILE
-export CROSS_COMPILE_ARM32=toolchain/bin/$GCC_ARM32_FILE
+export CROSS_COMPILE=toolchain/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+export CC=toolchain/clang/host/linux-x86/clang-r353983c/bin/clang
 
 # Get date and time
 DATE=$(date +"%m-%d-%y")
@@ -93,10 +93,8 @@ AUTO_TOOLCHAIN()
 	     echo " "
 	     echo "Using GCC v4.9 toolchain"
 	     echo " "
-	     GCC_ARM64_FILE=aarch64-linux-android-
-	     CLANG=clang
-	     export CROSS_COMPILE=toolchain/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/$GCC_ARM64_FILE
-	     export CC=toolchain/clang/host/linux-x86/clang-r353983c/bin/$GCC_ARM32_FILE
+	     export CROSS_COMPILE=toolchain/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+	     export CC=toolchain/clang/host/linux-x86/clang-r353983c/bin/clang
 }
 
 ZIPPIFY()
