@@ -1,0 +1,34 @@
+=============================================
+NAME            :   Halium9
+=============================================
+DEVICE          :   SM-A205
+=============================================
+Version         :   0.9
+=============================================
+Based on        :   SM-A205G Kernel
+=============================================
+Dev             :   arpio
+=============================================
+Toolchain       :   Linaro GCC6.5
+=============================================
+Halium          :   ssh working
+=============================================
+Defconfig   :
+    - Samsung security              DISABLED
+    - Fingerprint ET5XX             DISABLED
+    - NFC Driver                    DISABLED
+    - Radio FM Driver               DISABLED
+    - Samsung Keyboard              DISABLED
+    - Samsung InfraRed              DISABLED
+    - HID Devices                   DISABLED
+    - Not needed USB drivers        DISABLED
+    - Not needed FSystems           DISABLED
+    - Most halium configs           ENABLED
+        *Security part              DISABLED
+    - SAMSUNG_TUI                   DISABLED
+    - CONFIG_TZDEV                  DISABLED
+    - Halium Security               ENABLED
+        *AppArmor
+        *TOMOYO
+        *YAMA
+=============================================
