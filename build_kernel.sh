@@ -14,29 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-# Set default directories
-ROOT_DIR=$(pwd)
-if [ ! -d "out" ]; then
-	mkdir out
-fi
-OUT_DIR=$ROOT_DIR/out
-KERNEL_DIR=$ROOT_DIR
-DTB_DIR=arch/arm64/boot/dts/exynos
-DTBO_DIR=arch/arm64/boot/dts/samsung/a21s
-
 # Set default kernel variables
 PROJECT_NAME="Halium Kernel"
-CORES=$(nproc --all)
-ZIPNAME=A217F_Halium_
+ZIPNAME=A217F_Halium
 DEFCONFIG=halium_defconfig
 
 # Export commands
-export VERSION=$DEFAULT_NAME
 export ARCH=arm64
-export CROSS_COMPILE=toolchain/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-
-export CC=toolchain/clang/host/linux-x86/clang-r353983c/bin/clang
-
+export PLATFORM_VERSION=12
+export ANDROID_MAJOR_VERSION=s
 # Get date and time
 DATE=$(date +"%m-%d-%y")
 BUILD_START=$(date +"%s")
@@ -68,10 +54,7 @@ CLEAN_SOURCE()
 	if [ -e "flashZip/anykernel/Image" ]
 	then
 	  {
-	     rm $DTB_DIR/*.dtb
-	     rm $DTBO_DIR/*.dtbo
 	     rm -rf flashZip/anykernel/Image
-#	     rm -rf flashZip/anykernel/dtbo.img
 	  }
 	fi
 	sleep 1	
@@ -80,22 +63,12 @@ CLEAN_SOURCE()
 BUILD_KERNEL()
 {
 	echo "*****************************************************"
-	echo "           Building kernel for $DEVICE_Axxx          "
-	export ANDROID_MAJOR_VERSION=$ANDROID
-	export LOCALVERSION=-$VERSION
-	make  $DEFCONFIG
-	make -j$CORES
+	echo "           Building kernel for SM-A217F          "
+	make ARCH=arm64 $DEFCONFIG
+	make ARCH=arm64 -j 64
 	sleep 1	
 }
 
-AUTO_TOOLCHAIN()
-{
-	     echo " "
-	     echo "Using GCC v4.9 toolchain"
-	     echo " "
-	     export CROSS_COMPILE=toolchain/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-
-	     export CC=toolchain/clang/host/linux-x86/clang-r353983c/bin/clang
-}
 
 ZIPPIFY()
 {
@@ -112,7 +85,6 @@ ZIPPIFY()
 		
 		# Copy Image and dtbo.img to anykernel directory
 		cp -f arch/$ARCH/boot/Image flashZip/anykernel/Image
-#		cp -f arch/$ARCH/boot/dtbo.img flashZip/anykernel/dtbo.img       dtbo does not get appeneded to kernel for A217f
 		
 		# Go to anykernel directory
 		cd flashZip/anykernel
@@ -128,25 +100,11 @@ ZIPPIFY()
 	fi
 }
 
-ENTER_VERSION()
-{
-	# Enter kernel revision for this build.
-	read -p "Please type kernel version without R (E.g: 4.7) : " rev;
-	if [ "${rev}" == "" ]; then
-		echo " "
-		echo "     Using '$REV' as version"
-	else
-		REV=$rev
-		echo " "
-		echo "     Version = $REV"
-	fi
-	sleep 2
-}
 
 RENAME()
 {
 	# Give proper name to kernel and zip name
-	ZIPNAME=$ZIPNAME"_"$TYPE"_"$REV".zip"
+	ZIPNAME=$ZIPNAME".zip"
 }
 
 DISPLAY_ELAPSED_TIME()
@@ -199,7 +157,4 @@ COMMON_STEPS()
 
 ###################### Script starts here #######################
 
-AUTO_TOOLCHAIN
-CLEAN_SOURCE
-ENTER_VERSION
 COMMON_STEPS
