@@ -57,6 +57,11 @@ CLEAN_SOURCE()
 	     rm -rf flashZip/anykernel/Image
 	  }
 	fi
+	if [ -e "flashZip/anykernel/A217F_Halium.zip"]
+	then
+	  {
+	     rm -rf flashZip/anykernel/A217_Halium.zip
+	  }
 	sleep 1	
 }
 

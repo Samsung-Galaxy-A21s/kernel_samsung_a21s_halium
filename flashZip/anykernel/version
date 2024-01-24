@@ -1,15 +1,15 @@
 =============================================
 NAME            :   Halium9
 =============================================
-DEVICE          :   SM-A205
+DEVICE          :   SM-A217F
 =============================================
-Version         :   0.9
+Version         :   V1.3
 =============================================
-Based on        :   SM-A205G Kernel
+Based on        :   A20e Kernel
 =============================================
-Dev             :   arpio
+Dev             :   RiskyGUY22
 =============================================
-Toolchain       :   Linaro GCC6.5
+Toolchain       :   GCC v4.9
 =============================================
 Halium          :   ssh working
 =============================================
@@ -28,7 +28,4 @@ Defconfig   :
     - SAMSUNG_TUI                   DISABLED
     - CONFIG_TZDEV                  DISABLED
     - Halium Security               ENABLED
-        *AppArmor
-        *TOMOYO
-        *YAMA
 =============================================
