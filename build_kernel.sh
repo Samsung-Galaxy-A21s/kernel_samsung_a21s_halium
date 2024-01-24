@@ -62,6 +62,7 @@ CLEAN_SOURCE()
 	  {
 	     rm -rf flashZip/anykernel/A217_Halium.zip
 	  }
+	fi
 	sleep 1	
 }
 
