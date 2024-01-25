@@ -90,7 +90,8 @@ AIK-Linux()
 		# Copy Image to AIK Directory
 		cd Halium/AIK-Linux
 		./unpackimg.sh
-		cp -r ../../out/arch/$ARCH/boot/Image Halium/AIK-Linux/split-img/boot.img-kernel
+		rm -rf split-img/boot.img-kernel
+		cp -f ../../out/arch/$ARCH/boot/Image split_img/boot.img-kernel
 		./repackimg.sh
 		cp -f image-new.img ../packaging/boot.img
 		./cleanup.sh
