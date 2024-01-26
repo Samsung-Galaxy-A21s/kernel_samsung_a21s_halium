@@ -115,9 +115,12 @@
 #include "udp_impl.h"
 #include <net/sock_reuseport.h>
 #include <net/addrconf.h>
+
+#if defined(CONFIG_KNOX_NCM)
 // SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA {
 #include <net/ncm.h>
 // SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA }
+#endif
 
 struct udp_table udp_table __read_mostly;
 EXPORT_SYMBOL(udp_table);
@@ -2245,6 +2248,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
 	if (sk) {
 		struct dst_entry *dst = skb_dst(skb);
 		int ret;
+#if defined(CONFIG_KNOX_NCM)
 		// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA {
 		struct nf_conn *ct = NULL;
 		enum ip_conntrack_info ctinfo;
@@ -2252,10 +2256,11 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
 		char srcaddr[INET6_ADDRSTRLEN_NAP];
 		char dstaddr[INET6_ADDRSTRLEN_NAP];
 		// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA }
-
+#endif
 		if (unlikely(sk->sk_rx_dst != dst))
 			udp_sk_rx_dst_set(sk, dst);
 
+#if defined(CONFIG_KNOX_NCM)
 		// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA {
 		/* function to handle open flows with incoming udp packets */
 		if (check_ncm_flag()) {
@@ -2303,6 +2308,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
 				}
 			}
 		}
+#endif
 		// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA }
 		ret = udp_unicast_rcv_skb(sk, skb, uh);
 		sock_put(sk);
@@ -2315,6 +2321,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
 
 	sk = __udp4_lib_lookup_skb(skb, uh->source, uh->dest, udptable);
 	if (sk) {
+#if defined(CONFIG_KNOX_NCM)
 		// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA {
 		struct nf_conn *ct = NULL;
 		enum ip_conntrack_info ctinfo;
@@ -2322,7 +2329,9 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
 		char srcaddr[INET6_ADDRSTRLEN_NAP];
 		char dstaddr[INET6_ADDRSTRLEN_NAP];
 		// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA }
+#endif
 		// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA {
+#if defined(CONFIG_KNOX_NCM)
 		/* function to handle open flows with incoming udp packets */
 		if (check_ncm_flag()) {
 			if ( (sk) && (sk->sk_protocol == IPPROTO_UDP) ) {
@@ -2369,6 +2378,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
 				}
 			}
 		}
+#endif
 		// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA }
 		return udp_unicast_rcv_skb(sk, skb, uh);
 	}
