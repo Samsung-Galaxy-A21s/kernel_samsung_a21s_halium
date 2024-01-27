@@ -47,6 +47,6 @@ develop a Droidian OS port so A21s users can get the full GNU/Linux experience o
 
 ## Credits
 
-Big thanks to arpio's halium port for the [a20](https://gitlab.com/arpio/kernel_samsung_a20_halium), on which the a21s port is heavily based on.
-Credit to [physwizz](https://github.com/physwizz) for the CPU overclocking and underclocking code.
-Credit to [Osmosis](https://github.com/osm0sis) for the Android Image Kitchen tools
+* Big thanks to arpio's halium port for the [a20](https://gitlab.com/arpio/kernel_samsung_a20_halium), on which the a21s port is heavily based on.
+* Credit to [physwizz](https://github.com/physwizz) for the CPU overclocking and underclocking code.
+* Credit to [Osmosis](https://github.com/osm0sis) for the Android Image Kitchen tools
