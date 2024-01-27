@@ -58,8 +58,7 @@
 #include <soc/samsung/hw_forward.h>
 #endif
 #include <net/netns/hash.h>
-
-#if defined(CONFIG_KNOX_NCM)
+#ifdef CONFIG_KNOX_NCM
 // SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA {
 #include <net/ncm.h>
 // SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA }
@@ -483,7 +482,8 @@ clean_from_lists(struct nf_conn *ct)
 static void nf_ct_add_to_dying_list(struct nf_conn *ct)
 {
 	struct ct_pcpu *pcpu;
-#if defined(CONFIG_KNOX_NCM)
+
+#ifdef CONFIG_KNOX_NCM
 	// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA {
 	/* Add 'del_timer(&ct->npa_timeout)' if struct nf_conn->timeout is of type struct timer_list; */
 	/* send dying conntrack entry to collect data */
@@ -1256,7 +1256,7 @@ static void gc_worker(struct work_struct *work)
 				nf_ct_gc_expired(tmp);
 				expired_count++;
 				continue;
-#if defined(CONFIG_KNOX_NCM)
+#ifdef CONFIG_KNOX_NCM
 			// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA {
 			} else if ( (tmp != NULL) && (check_ncm_flag()) && (check_intermediate_flag()) && (atomic_read(&tmp->startFlow)) && (atomic_read(&tmp->intermediateFlow)) ) {
 				s32 npa_timeout = tmp->npa_timeout - ((u32)(jiffies));
@@ -1264,9 +1264,9 @@ static void gc_worker(struct work_struct *work)
 					tmp->npa_timeout = ((u32)(jiffies)) + (get_intermediate_timeout() * HZ);
 					knox_collect_conntrack_data(tmp, NCM_FLOW_TYPE_INTERMEDIATE, 20);
 				}
+#endif
 			}
 			// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA }
-#endif
 			if (nf_conntrack_max95 == 0 || gc_worker_skip_ct(tmp))
 				continue;
 
@@ -1320,8 +1320,8 @@ static void gc_worker(struct work_struct *work)
 	ratio = scanned ? expired_count * 100 / scanned : 0;
 	if (ratio > GC_EVICT_RATIO) {
 		gc_work->next_gc_run = min_interval;
+#ifdef CONFIG_KNOX_NCM
 		// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA {
-#if defined(CONFIG_KNOX_NCM)
 		if ( (check_ncm_flag()) && (check_intermediate_flag()) ) {
 			gc_work->next_gc_run = 0;
 		}
@@ -1335,8 +1335,8 @@ static void gc_worker(struct work_struct *work)
 		gc_work->next_gc_run += min_interval;
 		if (gc_work->next_gc_run > max)
 			gc_work->next_gc_run = max;
+#ifdef CONFIG_KNOX_NCM
 		// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA {
-#if defined(CONFIG_KNOX_NCM)
 		if ( (check_ncm_flag()) && (check_intermediate_flag()) ) {
 			gc_work->next_gc_run = 0;
 		}
@@ -1365,8 +1365,8 @@ __nf_conntrack_alloc(struct net *net,
 		     gfp_t gfp, u32 hash)
 {
 	struct nf_conn *ct;
+#ifdef CONFIG_KNOX_NCM
 	// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA {
-#if defined(CONFIG_KNOX_NCM)
 	struct timespec open_timespec;
 	// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA }
 #endif
@@ -1394,8 +1394,8 @@ __nf_conntrack_alloc(struct net *net,
 		goto out;
 
 	spin_lock_init(&ct->lock);
+#ifdef CONFIG_KNOX_NCM
 	// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA {
-#if defined(CONFIG_KNOX_NCM)
 	/* initialize the conntrack structure members when memory is allocated */
 	if (ct != NULL) {
 		open_timespec = current_kernel_time();
