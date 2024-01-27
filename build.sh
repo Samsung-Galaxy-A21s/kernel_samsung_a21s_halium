@@ -15,30 +15,6 @@ DATE=$(date +"%m-%d-%y")
 BUILD_START=$(date +"%s")
 
 ################### Executable functions #######################
-CLEAN_SOURCE()
-{
-	echo "*****************************************************"
-	echo " "
-	echo "              Cleaning kernel source"
-	echo " "
-	echo "*****************************************************"
-	make clean
-	CLEAN_SUCCESS=$?
-	if [ $CLEAN_SUCCESS != 0 ]
-		then
-			echo " Error: make clean failed"
-			exit
-	fi
-
-	make mrproper
-	MRPROPER_SUCCESS=$?
-	if [ $MRPROPER_SUCCESS != 0 ]
-		then
-			echo " Error: make mrproper failed"
-			exit
-	fi
-}
-
 CLEAN_PACKAGES()
 {
 
